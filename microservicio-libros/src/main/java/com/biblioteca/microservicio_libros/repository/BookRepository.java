@@ -1,13 +1,15 @@
 package com.biblioteca.microservicio_libros.repository;
 
 import com.biblioteca.microservicio_libros.model.Book;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Repository
-public interface BookRepository {
+public interface BookRepository extends JpaRepository<Book, Long> {
 
     Optional<Book> findByIsbn(String isbn);
-    boolean existByIsbn(String isbn);
+    boolean existsByIsbn(String isbn);
 }
