@@ -157,15 +157,40 @@ class BookServiceTest {
                 10
         );
 
-        when(bookRepository.findById(1L)).thenReturn(Optional.of(testBook));
-        when(bookRepository.existsByIsbn(updateDTO.getIsbn())).thenReturn(false);
-        when(bookRepository.save(any(Book.class))).thenReturn(testBook);
-        when(bookMapper.toResponseDTO(testBook)).thenReturn(responseDTO);
+        when(bookRepository.findById(1L))
+                .thenReturn(Optional.of(testBook));
+
+        when(bookRepository.save(any(Book.class)))
+                .thenReturn(testBook);
+
+        when(bookMapper.toResponseDTO(testBook))
+                .thenReturn(responseDTO);
 
         BookResponseDTO result = bookService.updateBook(1L, updateDTO);
 
         assertThat(result).isNotNull();
-        verify(bookRepository, times(1)).save(any(Book.class));
+        verify(bookRepository).save(any(Book.class));
+    }
+
+    @Test
+    void whenUpdateBook_withDuplicateIsbn_thenThrowException() {
+        BookRequestDTO updateDTO = new BookRequestDTO(
+                "El Principito",
+                "Antoine de Saint-Exupéry",
+                "978-0156012195",
+                10
+        );
+
+        when(bookRepository.findById(1L))
+                .thenReturn(Optional.of(testBook));
+
+        when(bookRepository.existsByIsbn(updateDTO.getIsbn()))
+                .thenReturn(true);
+
+        assertThatThrownBy(() -> bookService.updateBook(1L, updateDTO))
+                .isInstanceOf(DuplicateIsbnException.class);
+
+        verify(bookRepository, never()).save(any());
     }
 
     @Test

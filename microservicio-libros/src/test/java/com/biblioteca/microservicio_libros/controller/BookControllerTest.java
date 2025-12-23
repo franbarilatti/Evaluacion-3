@@ -7,13 +7,11 @@ import com.biblioteca.microservicio_libros.exception.BookNotFoundException;
 import com.biblioteca.microservicio_libros.exception.DuplicateIsbnException;
 import com.biblioteca.microservicio_libros.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Import;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,23 +27,24 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BookController.class)
-@Import(TestConfig.class)  // Importar configuración de test
 class BookControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @MockBean
     private BookService bookService;
 
+    private ObjectMapper objectMapper;
     private BookRequestDTO requestDTO;
     private BookResponseDTO responseDTO;
 
     @BeforeEach
     void setUp() {
+        // Configurar ObjectMapper manualmente con soporte para Java 8 Time
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+
         requestDTO = new BookRequestDTO(
                 "El Principito",
                 "Antoine de Saint-Exupéry",
@@ -188,15 +187,5 @@ class BookControllerTest {
                 .andExpect(status().isOk());
 
         verify(bookService, times(1)).increaseStock(1L);
-    }
-}
-
-
-@TestConfiguration
-class TestConfig {
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        return new ObjectMapper();
     }
 }
