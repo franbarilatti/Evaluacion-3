@@ -174,17 +174,18 @@ class BookServiceTest {
 
     @Test
     void whenUpdateBook_withDuplicateIsbn_thenThrowException() {
+        String isbnDeOtroLibro = "111-2223334445";
+
         BookRequestDTO updateDTO = new BookRequestDTO(
                 "El Principito",
                 "Antoine de Saint-Exupéry",
-                "978-0156012195",
+                isbnDeOtroLibro,
                 10
         );
-
         when(bookRepository.findById(1L))
                 .thenReturn(Optional.of(testBook));
 
-        when(bookRepository.existsByIsbn(updateDTO.getIsbn()))
+        when(bookRepository.existsByIsbn(isbnDeOtroLibro))
                 .thenReturn(true);
 
         assertThatThrownBy(() -> bookService.updateBook(1L, updateDTO))

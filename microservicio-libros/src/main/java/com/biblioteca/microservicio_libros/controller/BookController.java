@@ -50,7 +50,7 @@ public class BookController {
         return ResponseEntity.ok(stock);
     }
 
-    @PutMapping("/id")
+    @PutMapping("/{id}")
     @Operation(summary = "Actualizar un libro existente")
     public ResponseEntity<BookResponseDTO> updateBook(@PathVariable Long id, @Valid @RequestBody BookRequestDTO requestDTO){
         BookResponseDTO response = bookService.updateBook(id, requestDTO);
@@ -64,7 +64,7 @@ public class BookController {
         return ResponseEntity.noContent().build();
     }
 
-    @PatchMapping("/{id}/decrese-stock")
+    @PatchMapping("/{id}/decrease-stock")
     @Operation(summary = "Disminuir stock de un libro (uso interno)")
     public ResponseEntity<Void> decreaseStock(@PathVariable Long id){
         bookService.decreaseStock(id);
