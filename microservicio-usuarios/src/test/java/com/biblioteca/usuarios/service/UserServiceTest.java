@@ -152,7 +152,7 @@ class UserServiceTest {
         );
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
-        when(userRepository.existsByEmail(updateDTO.getEmail())).thenReturn(false);
+        lenient().when(userRepository.existsByEmail(updateDTO.getEmail())).thenReturn(false);
         when(userRepository.save(any(User.class))).thenReturn(testUser);
         when(userMapper.toResponseDTO(testUser)).thenReturn(responseDTO);
 
