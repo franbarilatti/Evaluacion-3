@@ -1,0 +1,805 @@
+{
+	"info": {
+		"_postman_id": "196effb8-19c0-411e-8d3d-ad1b568f23a3",
+		"name": "Biblioteca Digital - Sistema Completo",
+		"description": "Colección completa para probar el sistema de microservicios de biblioteca digital",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "13491783"
+	},
+	"item": [
+		{
+			"name": "FLUJO COMPLETO - Ejecutar en orden",
+			"item": [
+				{
+					"name": "1. Crear Usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"userId\", jsonData.id);",
+									"    pm.test(\"Usuario creado exitosamente\", function () {",
+									"        pm.response.to.have.status(201);",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"María García\",\n  \"email\": \"maria.garcia@biblioteca.com\",\n  \"active\": true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "2. Crear Libro",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"bookId\", jsonData.id);",
+									"    pm.test(\"Libro creado exitosamente\", function () {",
+									"        pm.response.to.have.status(201);",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Clean Code\",\n  \"author\": \"Robert C. Martin\",\n  \"isbn\": \"978-0132350884\",\n  \"availableCopies\": 5\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/libros",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"libros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "3. Verificar Stock Inicial",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/libros/{{bookId}}/stock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"libros",
+								"{{bookId}}",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "4. Crear Préstamo",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 201) {",
+									"    var jsonData = pm.response.json();",
+									"    pm.environment.set(\"loanId\", jsonData.id);",
+									"    pm.test(\"Préstamo creado exitosamente\", function () {",
+									"        pm.response.to.have.status(201);",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": {{userId}},\n  \"bookId\": {{bookId}}\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8083/api/prestamos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"prestamos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "5. Verificar Stock Reducido",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/libros/{{bookId}}/stock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"libros",
+								"{{bookId}}",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "6. Consultar Préstamos Activos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/prestamos/activos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"prestamos",
+								"activos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "7. Devolver Préstamo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/prestamos/{{loanId}}/devolver",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"prestamos",
+								"{{loanId}}",
+								"devolver"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "8. Verificar Stock Restaurado",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/libros/{{bookId}}/stock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"libros",
+								"{{bookId}}",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuarios - CRUD",
+			"item": [
+				{
+					"name": "Crear Usuario",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"fullName\": \"Juan Pérez\",\n  \"email\": \"juan.perez@biblioteca.com\",\n  \"active\": true\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8082/api/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Todos los Usuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/usuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Usuario por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/usuarios/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Desactivar Usuario",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/usuarios/1/desactivar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"usuarios",
+								"1",
+								"desactivar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Usuario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8082/api/usuarios/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8082",
+							"path": [
+								"api",
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Libros - CRUD",
+			"item": [
+				{
+					"name": "Crear Libro",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"The Pragmatic Programmer\",\n  \"author\": \"Andrew Hunt, David Thomas\",\n  \"isbn\": \"978-0135957059\",\n  \"availableCopies\": 3\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/libros",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"libros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Todos los Libros",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/libros",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"libros"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Libro por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/libros/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"libros",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Stock del Libro",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/libros/1/stock",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"libros",
+								"1",
+								"stock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar Libro",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Clean Code - Edición Actualizada\",\n  \"author\": \"Robert C. Martin\",\n  \"isbn\": \"978-0132350884\",\n  \"availableCopies\": 10\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/libros/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"libros",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar Libro",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/api/libros/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"libros",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Préstamos - CRUD",
+			"item": [
+				{
+					"name": "Crear Préstamo",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": 1,\n  \"bookId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8083/api/prestamos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"prestamos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Todos los Préstamos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/prestamos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"prestamos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Préstamo por ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/prestamos/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"prestamos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Devolver Préstamo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/prestamos/1/devolver",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"prestamos",
+								"1",
+								"devolver"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Préstamos Activos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/prestamos/activos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"prestamos",
+								"activos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Préstamos por Usuario",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/prestamos/usuario/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"prestamos",
+								"usuario",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener Préstamos por Libro",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/prestamos/libro/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"prestamos",
+								"libro",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Casos de Error",
+			"item": [
+				{
+					"name": "Usuario no existe",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": 999,\n  \"bookId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8083/api/prestamos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"prestamos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Libro sin stock",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"userId\": 1,\n  \"bookId\": 1\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8083/api/prestamos",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"prestamos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Devolver préstamo ya devuelto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8083/api/prestamos/1/devolver",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"api",
+								"prestamos",
+								"1",
+								"devolver"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ISBN duplicado",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"title\": \"Otro libro\",\n  \"author\": \"Autor\",\n  \"isbn\": \"978-0132350884\",\n  \"availableCopies\": 3\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8081/api/libros",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"api",
+								"libros"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
