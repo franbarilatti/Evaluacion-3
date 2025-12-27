@@ -5,11 +5,15 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(name = "usuarios-service", url = "http://localhost:8082/api/usuarios")
+@FeignClient(
+        name = "usuarios-service",
+        url = "${usuarios.service.url}"
+)
 public interface UserClient {
-    @GetMapping("/{id}/status")
+
+    @GetMapping("/api/usuarios/{id}/status")
     UserStatusDTO getUserStatus(@PathVariable Long id);
 
-    @GetMapping("/{id}/validate-active")
+    @GetMapping("/api/usuarios/{id}/validate-active")
     void validateUserIsActive(@PathVariable Long id);
 }
