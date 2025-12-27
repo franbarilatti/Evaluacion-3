@@ -71,7 +71,7 @@ public class LoanService {
         return loanRepository.findAll()
                 .stream()
                 .map(loanMapper::toResponseDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -110,7 +110,7 @@ public class LoanService {
         return loanRepository.findByReturnDateIsNull()
                 .stream()
                 .map(loanMapper::toResponseDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -118,7 +118,7 @@ public class LoanService {
         return loanRepository.findByUserId(userId)
                 .stream()
                 .map(loanMapper::toResponseDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Transactional(readOnly = true)
@@ -126,7 +126,7 @@ public class LoanService {
         return loanRepository.findByBookId(bookId)
                 .stream()
                 .map(loanMapper::toResponseDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
 

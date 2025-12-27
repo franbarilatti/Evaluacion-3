@@ -8,6 +8,8 @@ class MicroservicioPrestamosApplicationTests {
 
 	@Test
 	void contextLoads() {
+		// Este método se deja vacío intencionalmente para verificar
+		// que el contexto de la aplicación Spring se carga sin errores.
 	}
 
 }
