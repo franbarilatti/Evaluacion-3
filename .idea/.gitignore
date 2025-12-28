@@ -1,3 +1,37 @@
-# Default ignored files
+### --- ARCHIVOS DE CONFIGURACIÓN Y SECRETOS ---
+# Ignorar archivos de propiedades que pueden contener contraseñas
+# Es mejor usar variables de entorno, pero por seguridad ignoramos archivos locales
+.env
+.local
+*.log
+
+### --- JAVA & MAVEN ---
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+### --- INTELLIJ IDEA ---
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
 /shelf/
 /workspace.xml
+
+### --- ECLIPSE ---
+.metadata
+.classpath
+.project
+.settings/
+bin/
+
+### --- SISTEMA OPERATIVO ---
+DS_Store
+Thumbs.db
+
+### --- COMPLEMENTOS ---
+# Si usas wrappers de Maven
+.mvn/wrapper/maven-wrapper.jar
